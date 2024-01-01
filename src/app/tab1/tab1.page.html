@@ -1,17 +1,132 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" style="position: fixed">
   <ion-toolbar>
-    <ion-title>
-      Tab 1
+    <ion-title slot="start">
+      ACTUAL
     </ion-title>
+    <ion-buttons>
+      <ion-button (click)="updateData()">ACTUALIZAR</ion-button>
+    </ion-buttons>
+    <ion-item slot="end">
+      {{date}}
+    </ion-item>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-card style="margin-top: 65px">
+  <ion-grid>
+    <ion-card-header>
+      <ion-card-title>Producción</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-row nowrap>
+        <ion-col>
+          <ion-label>
+            <p>Hidro:</p>
+            <b>{{inverter1.pvInputPower}} W </b>
+          </ion-label>
+        </ion-col>
+        <ion-col>
+          <ion-label>
+            <p>Solar:</p>
+            <b>{{inverter1.pvInputPower}} W </b>
+          </ion-label>
+        </ion-col>
+        <ion-col>
+          <ion-label color="success">
+            <p>Produciendo:</p>
+            <b>{{inverter1.pvInputPower + inverter2.pvInputPower}} W </b>
+          </ion-label>
+        </ion-col>
+        <ion-col>
+          <ion-label color="danger">
+            <p>Consumo:</p>
+            <b>{{inverter1.totalAcOutputActivePower}} W </b>
+          </ion-label>
+        </ion-col>
+        <ion-col>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
-</ion-content>
+          <ion-text>
+            <h1><b>Total:</b></h1>
+          </ion-text>
+          <h2>
+            <b>{{inverter1.pvInputPower + inverter2.pvInputPower - inverter1.totalAcOutputActivePower}}
+              W </b></h2>
+        </ion-col>
+      </ion-row>
+
+      <!--      <div style="display:block;">-->
+      <!--        <canvas baseChart-->
+      <!--                [data]="inversorData"-->
+      <!--                [labels]="inversorLabels"-->
+      <!--                [options]="inversorOptions"-->
+      <!--                [chartType]="inversorType">-->
+      <!--        </canvas>-->
+      <!--      </div>-->
+
+    </ion-card-content>
+  </ion-grid>
+</ion-card>
+
+<ion-card>
+  <ion-grid>
+    <ion-card-header>
+      <ion-row>
+        <ion-col>
+          <ion-card-title style="width: 60%; display: inline-block">Baterías</ion-card-title>
+
+          <ion-icon
+            *ngIf="(inverter2.totalChargingCurrent - inverter2.batteryDischgCurrent - inverter1.batteryDischgCurrent ) <= 0 "
+            size="large" style="margin-bottom: 5px !important; display: inline-block; vertical-align: middle"
+            name="battery-half-outline"></ion-icon>
+          <ion-icon
+            *ngIf="(inverter2.totalChargingCurrent -inverter2.batteryDischgCurrent- inverter1.batteryDischgCurrent ) > 0 "
+            size="large" style="margin-bottom: 5px !important; display: inline-block; vertical-align: middle"
+            color="success" name="battery-charging-outline"></ion-icon>
+
+        </ion-col>
+        <ion-col>
+        </ion-col>
+      </ion-row>
+    </ion-card-header>
+    <ion-card-content>
+
+      <div style="display: inline-block; width: 50%">
+        <!--        <canvas baseChart-->
+        <!--                [data]="batteryData"-->
+        <!--                [labels]="batteryLabels"-->
+        <!--                [chartType]="batteryChartType"-->
+        <!--                [plugins]="batteryPlugins"-->
+        <!--                [options]="batteryOptions"-->
+        <!--                [colors]="batteryColors">-->
+        <!--        </canvas>-->
+      </div>
+      <ion-col style="display: inline-block; width: 50%; vertical-align: top; margin-top: 20px">
+                <span
+                  *ngIf="(inverter2.totalChargingCurrent -inverter2.batteryDischgCurrent - inverter1.batteryDischgCurrent ) <= 0 ">
+                <ion-text
+                  color="medium">
+                    Descargando...
+                </ion-text>
+                <ion-label color="medium">
+                    <b>{{(inverter2.totalChargingCurrent - inverter2.batteryDischgCurrent - inverter1.batteryDischgCurrent)}}
+                      A </b>
+                </ion-label>
+                </span>
+        <span
+          *ngIf="(inverter2.totalChargingCurrent -inverter2.batteryDischgCurrent - inverter1.batteryDischgCurrent  ) > 0 ">
+                <ion-text
+                  color="success">
+                    Cargando...
+                </ion-text>
+                <ion-label color="success">
+                    <b>{{inverter2.totalChargingCurrent - inverter2.batteryDischgCurrent - inverter1.batteryDischgCurrent}}
+                      A </b>
+                </ion-label>
+                </span>
+        <ion-text>
+          <h2>Voltaje:<b> {{inverter2.batteryVoltage}} V </b></h2>
+        </ion-text>
+      </ion-col>
+    </ion-card-content>
+  </ion-grid>
+</ion-card>
