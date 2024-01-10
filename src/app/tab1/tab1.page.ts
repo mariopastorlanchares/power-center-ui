@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ChartConfiguration, ChartType, ChartOptions} from 'chart.js';
-import {update} from "@angular/fire/database";
+import {ChartConfiguration, ChartOptions, ChartType} from 'chart.js';
 import {DEFAULT_INVERTER, Inverter, InverterService} from "../services/inverter-service.service";
 
 @Component({
@@ -8,7 +7,7 @@ import {DEFAULT_INVERTER, Inverter, InverterService} from "../services/inverter-
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
-export class Tab1Page implements OnInit{
+export class Tab1Page implements OnInit {
 
 
   ngOnInit() {
@@ -31,16 +30,15 @@ export class Tab1Page implements OnInit{
     elements: {
       arc: {
         // Configura aquí las opciones de rotación y circunferencia
-       // rotation: Math.PI,
-      //  circumference: Math.PI
+        // rotation: Math.PI,
+        //  circumference: Math.PI
       }
     },
     plugins: {
       tooltip: {
         callbacks: {
-          label: function(context) {
-            let label = context.dataset.data[context.dataIndex] + '%';
-            return label;
+          label: function (context) {
+            return context.dataset.data[context.dataIndex] + '%';
           }
         }
       }
@@ -48,9 +46,8 @@ export class Tab1Page implements OnInit{
   };
 
 
-
-
-  constructor(private inverterService: InverterService) {}
+  constructor(private inverterService: InverterService) {
+  }
 
   updateData() {
     this.inverterService.getLatestInverterData('inverter_1').subscribe(data => {

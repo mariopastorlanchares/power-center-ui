@@ -7,7 +7,7 @@ import {AngularFireAuth} from "@angular/fire/compat/auth";
 export interface Inverter {
   acOutputActivePower: number;
   batteryCapacity: number;
-  pvInputPower: number;
+  pvInputPower1: number;
   batteryVoltage: number;
   totalOutActivePower: number;
   batteryDischgCurrent: number;
@@ -19,7 +19,7 @@ export interface Inverter {
 export const DEFAULT_INVERTER: Inverter = {
   acOutputActivePower: 0,
   batteryCapacity: 0,
-  pvInputPower: 0,
+  pvInputPower1: 0,
   batteryVoltage: 0,
   totalOutActivePower: 0,
   batteryDischgCurrent: 0,
