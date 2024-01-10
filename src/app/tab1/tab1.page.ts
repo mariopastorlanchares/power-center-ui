@@ -46,6 +46,7 @@ export class Tab1Page implements OnInit {
     cutout: '50%',
     rotation: 270,
     circumference: 180,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false
