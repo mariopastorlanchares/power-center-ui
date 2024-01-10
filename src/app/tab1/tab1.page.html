@@ -21,26 +21,26 @@
       <ion-row nowrap>
         <ion-col>
           <ion-label>
-            <p>Hidro:</p>
-            <b>{{inverter1.pvInputPower1}} W </b>
+            <p>Inversor 1:</p>
+            <b>{{inverterOne.pvInputPower1}} W </b>
           </ion-label>
         </ion-col>
         <ion-col>
           <ion-label>
-            <p>Solar:</p>
-            <b>{{inverter2.pvInputPower1}} W </b>
+            <p>Inversor 2:</p>
+            <b>{{inverterTwo.pvInputPower1}} W </b>
           </ion-label>
         </ion-col>
         <ion-col>
           <ion-label color="success">
             <p>Produciendo:</p>
-            <b>{{inverter1.pvInputPower1 + inverter2.pvInputPower1}} W </b>
+            <b>{{inverterOne.pvInputPower1 + inverterTwo.pvInputPower1}} W </b>
           </ion-label>
         </ion-col>
         <ion-col>
           <ion-label color="danger">
             <p>Consumo:</p>
-            <b>{{inverter1.totalAcOutputActivePower}} W </b>
+            <b>{{inverterOne.totalAcOutputActivePower}} W </b>
           </ion-label>
         </ion-col>
         <ion-col>
@@ -49,19 +49,18 @@
             <h1><b>Total:</b></h1>
           </ion-text>
           <h2>
-            <b>{{inverter1.pvInputPower1 + inverter2.pvInputPower1 - inverter1.totalAcOutputActivePower}}
+            <b>{{inverterOne.pvInputPower1 + inverterTwo.pvInputPower1 - inverterOne.totalAcOutputActivePower}}
               W </b></h2>
         </ion-col>
       </ion-row>
 
-      <!--      <div style="display:block;">-->
-      <!--        <canvas baseChart-->
-      <!--                [data]="inversorData"-->
-      <!--                [labels]="inversorLabels"-->
-      <!--                [options]="inversorOptions"-->
-      <!--                [chartType]="inversorType">-->
-      <!--        </canvas>-->
-      <!--      </div>-->
+      <div>
+        <canvas baseChart
+                [data]="productionChartData"
+                [options]="productionChartOptions"
+                [type]="'bar'">
+        </canvas>
+      </div>
 
     </ion-card-content>
   </ion-grid>
@@ -75,11 +74,11 @@
           <ion-card-title style="width: 60%; display: inline-block">Baterías</ion-card-title>
 
           <ion-icon
-            *ngIf="(inverter2.totalChargingCurrent - inverter2.batteryDischgCurrent - inverter1.batteryDischgCurrent ) <= 0 "
+            *ngIf="(inverterTwo.totalChargingCurrent - inverterTwo.batteryDischgCurrent - inverterOne.batteryDischgCurrent ) <= 0 "
             size="large" style="margin-bottom: 5px !important; display: inline-block; vertical-align: middle"
             name="battery-half-outline"></ion-icon>
           <ion-icon
-            *ngIf="(inverter2.totalChargingCurrent -inverter2.batteryDischgCurrent- inverter1.batteryDischgCurrent ) > 0 "
+            *ngIf="(inverterTwo.totalChargingCurrent -inverterTwo.batteryDischgCurrent- inverterOne.batteryDischgCurrent ) > 0 "
             size="large" style="margin-bottom: 5px !important; display: inline-block; vertical-align: middle"
             color="success" name="battery-charging-outline"></ion-icon>
 
@@ -91,40 +90,37 @@
     <ion-card-content>
 
       <div style="display: inline-block; width: 50%">
-        <!--        <canvas baseChart-->
-        <!--                [data]="batteryData"-->
-        <!--                [labels]="batteryLabels"-->
-        <!--                [chartType]="batteryChartType"-->
-        <!--                [plugins]="batteryPlugins"-->
-        <!--                [options]="batteryOptions"-->
-        <!--                [colors]="batteryColors">-->
-        <!--        </canvas>-->
+        <canvas baseChart
+                [data]="batteryChartData"
+                [options]="batteryChartOptions"
+                [type]="'doughnut'">
+        </canvas>
       </div>
       <ion-col style="display: inline-block; width: 50%; vertical-align: top; margin-top: 20px">
                 <span
-                  *ngIf="(inverter2.totalChargingCurrent -inverter2.batteryDischgCurrent - inverter1.batteryDischgCurrent ) <= 0 ">
+                  *ngIf="(inverterTwo.totalChargingCurrent -inverterTwo.batteryDischgCurrent - inverterOne.batteryDischgCurrent ) <= 0 ">
                 <ion-text
                   color="medium">
                     Descargando...
                 </ion-text>
                 <ion-label color="medium">
-                    <b>{{(inverter2.totalChargingCurrent - inverter2.batteryDischgCurrent - inverter1.batteryDischgCurrent)}}
+                    <b>{{(inverterTwo.totalChargingCurrent - inverterTwo.batteryDischgCurrent - inverterOne.batteryDischgCurrent)}}
                       A </b>
                 </ion-label>
                 </span>
         <span
-          *ngIf="(inverter2.totalChargingCurrent -inverter2.batteryDischgCurrent - inverter1.batteryDischgCurrent  ) > 0 ">
+          *ngIf="(inverterTwo.totalChargingCurrent -inverterTwo.batteryDischgCurrent - inverterOne.batteryDischgCurrent  ) > 0 ">
                 <ion-text
                   color="success">
                     Cargando...
                 </ion-text>
                 <ion-label color="success">
-                    <b>{{inverter2.totalChargingCurrent - inverter2.batteryDischgCurrent - inverter1.batteryDischgCurrent}}
+                    <b>{{inverterTwo.totalChargingCurrent - inverterTwo.batteryDischgCurrent - inverterOne.batteryDischgCurrent}}
                       A </b>
                 </ion-label>
                 </span>
         <ion-text>
-          <h2>Voltaje:<b> {{inverter2.batteryVoltage}} V </b></h2>
+          <h2>Voltaje:<b> {{inverterTwo.batteryVoltage}} V </b></h2>
         </ion-text>
       </ion-col>
     </ion-card-content>

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ChartConfiguration, ChartOptions, ChartType} from 'chart.js';
+import {ChartConfiguration, ChartData, ChartOptions, ChartType, Color} from 'chart.js';
 import {DEFAULT_INVERTER, Inverter, InverterService} from "../services/inverter-service.service";
 
 @Component({
@@ -14,35 +14,47 @@ export class Tab1Page implements OnInit {
     this.updateData();
   }
 
-  inverter1: Inverter = DEFAULT_INVERTER;
-  inverter2: Inverter = DEFAULT_INVERTER;
+  inverterOne: Inverter = DEFAULT_INVERTER;
+  inverterTwo: Inverter = DEFAULT_INVERTER;
   date: string = '';
 
-  public batteryChartType: ChartType = 'doughnut';
-  public batteryChartData: ChartConfiguration['data'] = {
-//    labels: this.batteryLabels,
-    datasets: [{
-      data: [0, 100],
-      backgroundColor: ['#00c853', '#b9f6ca']
-    }]
+  public productionChartData: ChartConfiguration<'bar'>['data'] = {
+    labels: ['Inversor 1', 'Inversor 2', 'Consumo'],
+    datasets: [
+      {
+        data: [],
+      }
+    ]
   };
-  public batteryChartOptions: ChartOptions = {
-    elements: {
-      arc: {
-        // Configura aquí las opciones de rotación y circunferencia
-        // rotation: Math.PI,
-        //  circumference: Math.PI
+
+  public productionChartOptions: ChartConfiguration<'bar'>['options'] = {
+    responsive: true,
+    // ... otras opciones de configuración ...
+  };
+
+  public batteryChartData: ChartData<'doughnut'> = {
+    labels: ['Cargando', 'Descargando'],
+    datasets: [
+      {
+        data: []
+      }
+    ]
+  };
+
+  public batteryChartOptions: ChartConfiguration<'doughnut'>['options'] = {
+    responsive: true,
+    cutout: '50%',
+    rotation: 270,
+    circumference: 180,
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        enabled: false
       }
     },
-    plugins: {
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            return context.dataset.data[context.dataIndex] + '%';
-          }
-        }
-      }
-    }
+    // ... other chart options ...
   };
 
 
@@ -52,11 +64,40 @@ export class Tab1Page implements OnInit {
   updateData() {
     this.inverterService.getLatestInverterData('inverter_1').subscribe(data => {
       console.log(data);
-      this.inverter1 = data;
+      this.inverterOne = data;
       this.date = data.timestr;
+      this.updateChartData();
     });
     this.inverterService.getLatestInverterData('inverter_2').subscribe(data => {
-      this.inverter2 = data;
+      this.inverterTwo = data;
+      this.updateChartData();
     });
+  }
+
+  updateChartData() {
+    this.productionChartData = {
+      datasets: [
+        {
+          data: [
+            this.inverterOne.pvInputPower1,
+            this.inverterTwo.pvInputPower1,
+            this.inverterOne.totalAcOutputActivePower
+          ],
+          label: 'Producción'
+        }
+      ]
+    };
+    this.batteryChartData = {
+      datasets: [
+        {
+          data: [
+            this.inverterTwo.batteryVoltage - 22,
+            28 - this.inverterTwo.batteryVoltage
+          ],
+          label: 'Baterías',
+          backgroundColor: ['#00c853', '#b9f6ca'],
+        }
+      ]
+    };
   }
 }
