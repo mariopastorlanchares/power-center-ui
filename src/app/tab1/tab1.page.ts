@@ -80,8 +80,8 @@ export class Tab1Page implements OnInit {
       datasets: [
         {
           data: [
-            this.inverterOne.pvInputPower1,
-            this.inverterTwo.pvInputPower1,
+            this.inverterOne.pvInputPower,
+            this.inverterTwo.pvInputPower,
             this.inverterOne.totalAcOutputActivePower
           ],
           label: 'Producción'
@@ -93,7 +93,7 @@ export class Tab1Page implements OnInit {
         {
           data: [
             this.inverterTwo.batteryVoltage - 22,
-            27.2 - this.inverterTwo.batteryVoltage
+            (27.2 - this.inverterTwo.batteryVoltage < 0) ? 0 : 27.2 - this.inverterTwo.batteryVoltage
           ],
           label: 'Baterías',
           backgroundColor: ['#00c853', '#b9f6ca'],

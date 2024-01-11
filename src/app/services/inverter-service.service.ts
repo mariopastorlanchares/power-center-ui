@@ -7,7 +7,7 @@ import {AngularFireAuth} from "@angular/fire/compat/auth";
 export interface Inverter {
   acOutputActivePower: number;
   batteryCapacity: number;
-  pvInputPower1: number;
+  pvInputPower: number;
   batteryVoltage: number;
   totalOutActivePower: number;
   batteryDischgCurrent: number;
@@ -19,7 +19,7 @@ export interface Inverter {
 export const DEFAULT_INVERTER: Inverter = {
   acOutputActivePower: 0,
   batteryCapacity: 0,
-  pvInputPower1: 0,
+  pvInputPower: 0,
   batteryVoltage: 0,
   totalOutActivePower: 0,
   batteryDischgCurrent: 0,
@@ -46,7 +46,16 @@ export class InverterService {
           return this.db.list<{ [key: string]: Inverter }>(`${user.uid}`, ref =>
             ref.orderByKey().limitToLast(1)
           ).valueChanges().pipe(
-            map(records => records.length > 0 ? records[0][inverterId] : {...DEFAULT_INVERTER})
+            map(records => {
+              if (records.length > 0) {
+                const inverterData = records[0][inverterId];
+                // Parse pvInputPower1 to integer
+                inverterData.pvInputPower = parseInt(String(inverterData.pvInputPower));
+                return inverterData;
+              } else {
+                return {...DEFAULT_INVERTER};
+              }
+            })
           );
         } else {
           return of({...DEFAULT_INVERTER});
@@ -54,5 +63,6 @@ export class InverterService {
       })
     );
   }
+
 
 }
