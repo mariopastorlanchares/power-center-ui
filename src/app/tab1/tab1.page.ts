@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ChartConfiguration, ChartData, ChartOptions, ChartType, Color} from 'chart.js';
+import {ChartConfiguration, ChartData} from 'chart.js';
 import {DEFAULT_INVERTER, Inverter, InverterService} from "../services/inverter-service.service";
 
 @Component({
@@ -41,6 +41,7 @@ export class Tab1Page implements OnInit {
     ]
   };
 
+
   public batteryChartOptions: ChartConfiguration<'doughnut'>['options'] = {
     responsive: true,
     cutout: '50%',
@@ -57,6 +58,8 @@ export class Tab1Page implements OnInit {
     },
     // ... other chart options ...
   };
+
+
 
 
   constructor(private inverterService: InverterService) {
