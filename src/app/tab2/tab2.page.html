@@ -1,17 +1,38 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 2
+      Histórico
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        Actualizar
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <div class="chart-container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Total: -20959 Wh</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="chart-data">
+          <div>Hidro: 2005 Wh</div>
+          <div>Solar: 2462 Wh</div>
+          <div>Producción: 4467 Wh</div>
+          <div>Consumo: 25246 Wh</div>
+        </div>
+        <div class="chart">
+          <canvas baseChart
+                  [datasets]="historicChartData.datasets"
+                  [labels]="historicChartData.labels"
+                  [options]="historicChartOptions"
+                  chartType="'line'">
+          </canvas>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

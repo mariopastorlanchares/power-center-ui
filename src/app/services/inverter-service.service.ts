@@ -4,6 +4,15 @@ import {map, Observable, of, switchMap, take} from 'rxjs';
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 
 
+export interface HistoryRecord {
+  inverter_1: Inverter;
+  inverter_2: Inverter;
+}
+
+interface History {
+  [key: string]: HistoryRecord;
+}
+
 export interface Inverter {
   acOutputActivePower: number;
   batteryCapacity: number;
@@ -64,5 +73,55 @@ export class InverterService {
     );
   }
 
+
+  getHistoricData(startDate: number): Observable<Inverter[]> {
+    return this.afAuth.authState.pipe(
+      take(1),
+      switchMap(user => {
+        if (user) {
+          return this.db.list<History>(`${user.uid}`, ref =>
+            ref.orderByKey().startAt(String(startDate))
+          ).valueChanges().pipe(
+            map((recordsArray: History[]) => { // Cambia aquí para manejar un arreglo
+              const inverters: Inverter[] = [];
+              // Iterar sobre cada objeto History en el arreglo
+              recordsArray.forEach(records => {
+                // Aquí especificamos que la clave es de tipo string
+                Object.keys(records).forEach((key: string) => {
+                  const record: HistoryRecord = records[key];
+                  if (record.inverter_1) {
+                    inverters.push(this.parseInverterData(record.inverter_1));
+                  }
+                  if (record.inverter_2) {
+                    inverters.push(this.parseInverterData(record.inverter_2));
+                  }
+                });
+              });
+
+              return inverters;
+            })
+          );
+        } else {
+          return of([]);
+        }
+      })
+    );
+  }
+
+
+  private parseInverterData(data: any): Inverter {
+    // Realizar el parsing necesario de los datos aquí, por ejemplo:
+    return {
+      acOutputActivePower: parseInt(data.acOutputActivePower),
+      batteryCapacity: parseInt(data.batteryCapacity),
+      pvInputPower: parseInt(data.pvInputPower),
+      batteryVoltage: parseFloat(data.batteryVoltage),
+      totalOutActivePower: parseInt(data.totalOutActivePower),
+      batteryDischgCurrent: parseInt(data.batteryDischgCurrent),
+      totalChargingCurrent: parseInt(data.totalChargingCurrent),
+      totalAcOutputActivePower: parseInt(data.totalAcOutputActivePower),
+      timestr: data.timestr
+    };
+  }
 
 }
