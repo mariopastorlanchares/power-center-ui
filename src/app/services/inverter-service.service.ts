@@ -83,7 +83,12 @@ export class InverterService {
             ref.orderByKey().startAt(String(startDate))
           ).valueChanges().pipe(
             map((recordsArray: HistoryRecord[]) => {
-              return recordsArray;
+              return recordsArray.map(record => {
+                return {
+                  inverter_1: this.parseInverterData(record['inverter_1']),
+                  inverter_2: this.parseInverterData(record['inverter_2'])
+                };
+              });
             })
           );
         } else {

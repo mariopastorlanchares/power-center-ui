@@ -10,9 +10,14 @@ import {HistoryRecord, Inverter, InverterService} from "../services/inverter-ser
 export class Tab2Page implements OnInit {
 
   public historicChartData: ChartConfiguration<'line'>['data'];
-  public historicChartOptions: ChartConfiguration<'line'>['options'];
+
   // TODO
   timeRange: any;
+  inverter1Total = 0;
+  inverter2Total = 0;
+  productionTotal = 0;
+  consumptionTotal = 0;
+  total = 0;
 
   constructor(private inverterService: InverterService) {
     this.historicChartData = {
@@ -31,36 +36,52 @@ export class Tab2Page implements OnInit {
       datasets: [
         {
           label: 'Inversor 1',
-          data: [], // Data must be typed as number[] or {x: any, y: number}[]
-          borderColor: 'rgba(255, 99, 132, 1)',
+          data: [],
+          borderColor: '#2196F3',
+          backgroundColor: 'rgba(0, 0, 0, 0)', // Un azul sólido para Inversor 1
           tension: 0.1,
-          fill: false,
+          fill: false, // Cambiar a true para llenar el área bajo la línea
+          pointRadius: 0,
+          type: 'line'
         },
         {
           label: 'Inversor 2',
-          data: [], // Data must be typed as number[] or {x: any, y: number}[]
-          borderColor: 'rgba(54, 162, 235, 1)',
+          data: [],
+          borderColor: '#FFEB3B',
+          backgroundColor: 'rgba(0, 0, 0, 0)',
           tension: 0.1,
           fill: false,
+          pointRadius: 0,
+          type: 'line'
         },
         {
           label: 'Producción',
-          data: [], // Data must be typed as number[] or {x: any, y: number}[]
-          borderColor: 'rgba(75, 192, 192, 1)',
-          tension: 0.1,
-          fill: false,
+          data: [],
+          borderColor: '#8BC34A',
+          backgroundColor: 'rgba(139, 195, 74, 0.5)',
+          // backgroundColor: '#ffc107', // Un amarillo sólido para Producción
+          tension: 0.1, // Cambiar la tensión para una curva más suave
+          fill: true,
+          pointBackgroundColor: 'rgba(0, 128, 0, 1)',
+          pointRadius: 0, // Hacer los puntos un poco más grandes
+          type: 'line'
         },
         {
           label: 'Consumo',
-          data: [], // Data must be typed as number[] or {x: any, y: number}[]
-          borderColor: 'rgba(255, 206, 86, 1)',
+          data: [],
+          borderColor: '#F44336', // Cambiar a un color más visible
+          backgroundColor: 'rgba(75, 192, 192, 0.5)', // Un rojo sólido para Consumo
           tension: 0.1,
-          fill: false,
+          fill: true,
+          pointBackgroundColor: '#dc3545', // Asegurarse de que los puntos sean visibles
+          pointRadius: 0, // Hacer los puntos un poco más grandes
+          type: 'line'
         }
       ],
-      labels: [] // Labels must be typed as string[]
-    } as ChartData<'line'>; // Type cast to ChartData<'line'>
+      labels: []
+    } as ChartData<'line'>;
   }
+
 
   fetchHistoricData() {
     // Determinar el timestamp para 'lastDay', que sería 24 horas atrás desde ahora.
@@ -75,17 +96,20 @@ export class Tab2Page implements OnInit {
 
   processHistoricData(history: HistoryRecord[]) {
     // Extract the labels for the chart
-    console.log(history)
     this.historicChartData.labels = history.map(record => {
       // Convert timestr to a more readable format if necessary, or just use it as is
       let timeString = (record.inverter_1) ? record.inverter_1.timestr : record.inverter_2.timestr;
       const date = new Date(timeString);
-      return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+      return `${date.getHours()}:${date.getMinutes()}`;
     });
+
     // TODO Arreglar el comando de subida para que espere a tener los dos inverters
     const inverter1Data = history.map(record => record.inverter_1.pvInputPower);
     const inverter2Data = history.map(record => record.inverter_2.pvInputPower);
-    const productionData = history.map(record => record.inverter_1.pvInputPower);
+    const productionData = history.map(record => {
+        return record.inverter_1.pvInputPower + record.inverter_2.pvInputPower;
+      }
+    );
     const consumptionData = history.map(record => record.inverter_1.totalAcOutputActivePower);
     this.historicChartData.datasets = [
       {...this.historicChartData.datasets[0], data: inverter1Data},
@@ -93,8 +117,5 @@ export class Tab2Page implements OnInit {
       {...this.historicChartData.datasets[2], data: productionData},
       {...this.historicChartData.datasets[3], data: consumptionData},
     ];
-
-    // If you're using a library like ng2-charts, you might need to trigger chart update manually
-    // For example, if you have ViewChild for the chart, you can call chart.update()
   }
 }
