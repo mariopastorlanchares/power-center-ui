@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {ChartConfiguration, ChartData, ChartDataset} from "chart.js";
-import {Inverter, InverterService} from "../services/inverter-service.service";
+import {HistoryRecord, Inverter, InverterService} from "../services/inverter-service.service";
 
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss']
 })
-export class Tab2Page implements OnInit{
+export class Tab2Page implements OnInit {
 
   public historicChartData: ChartConfiguration<'line'>['data'];
   public historicChartOptions: ChartConfiguration<'line'>['options'];
@@ -73,26 +73,25 @@ export class Tab2Page implements OnInit{
     });
   }
 
-  processHistoricData(invertersData: Inverter[]) {
-    // Assuming invertersData is an array of Inverter objects with a timestr property in ISO format
+  processHistoricData(history: HistoryRecord[]) {
     // Extract the labels for the chart
-    this.historicChartData.labels = invertersData.map(inverter => {
+    console.log(history)
+    this.historicChartData.labels = history.map(record => {
       // Convert timestr to a more readable format if necessary, or just use it as is
-      const date = new Date(inverter.timestr);
+      let timeString = (record.inverter_1) ? record.inverter_1.timestr : record.inverter_2.timestr;
+      const date = new Date(timeString);
       return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
     });
-
-    // Assuming you have separate datasets for each inverter and for total production and consumption
-    const inverter1Data = invertersData.map(inverter => inverter.pvInputPower);
-    const inverter2Data = invertersData.map(inverter => inverter.pvInputPower);
-    const productionData = invertersData.map(inverter => inverter.pvInputPower);
-    const consumptionData = invertersData.map(inverter => inverter.totalAcOutputActivePower);
-
+    // TODO Arreglar el comando de subida para que espere a tener los dos inverters
+    const inverter1Data = history.map(record => record.inverter_1.pvInputPower);
+    const inverter2Data = history.map(record => record.inverter_2.pvInputPower);
+    const productionData = history.map(record => record.inverter_1.pvInputPower);
+    const consumptionData = history.map(record => record.inverter_1.totalAcOutputActivePower);
     this.historicChartData.datasets = [
-      { ...this.historicChartData.datasets[0], data: inverter1Data },
-      { ...this.historicChartData.datasets[1], data: inverter2Data },
-      { ...this.historicChartData.datasets[2], data: productionData },
-      { ...this.historicChartData.datasets[3], data: consumptionData },
+      {...this.historicChartData.datasets[0], data: inverter1Data},
+      {...this.historicChartData.datasets[1], data: inverter2Data},
+      {...this.historicChartData.datasets[2], data: productionData},
+      {...this.historicChartData.datasets[3], data: consumptionData},
     ];
 
     // If you're using a library like ng2-charts, you might need to trigger chart update manually

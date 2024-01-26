@@ -74,31 +74,16 @@ export class InverterService {
   }
 
 
-  getHistoricData(startDate: number): Observable<Inverter[]> {
+  getHistoricData(startDate: number): Observable<HistoryRecord[]> {
     return this.afAuth.authState.pipe(
       take(1),
       switchMap(user => {
         if (user) {
-          return this.db.list<History>(`${user.uid}`, ref =>
+          return this.db.list<HistoryRecord>(`${user.uid}`, ref =>
             ref.orderByKey().startAt(String(startDate))
           ).valueChanges().pipe(
-            map((recordsArray: History[]) => { // Cambia aquí para manejar un arreglo
-              const inverters: Inverter[] = [];
-              // Iterar sobre cada objeto History en el arreglo
-              recordsArray.forEach(records => {
-                // Aquí especificamos que la clave es de tipo string
-                Object.keys(records).forEach((key: string) => {
-                  const record: HistoryRecord = records[key];
-                  if (record.inverter_1) {
-                    inverters.push(this.parseInverterData(record.inverter_1));
-                  }
-                  if (record.inverter_2) {
-                    inverters.push(this.parseInverterData(record.inverter_2));
-                  }
-                });
-              });
-
-              return inverters;
+            map((recordsArray: HistoryRecord[]) => {
+              return recordsArray;
             })
           );
         } else {
