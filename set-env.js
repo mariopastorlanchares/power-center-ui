@@ -18,5 +18,7 @@ export const environment = {
   firebaseConfig: ${JSON.stringify(firebaseConfig, null, 2)}
 };
 `;
+console.log('Escribiendo en environment.ts:', environmentContent);
 
 fs.writeFileSync('./src/environments/environment.ts', environmentContent);
+console.log('Archivo environment.ts generado con éxito');
