@@ -1,6 +1,6 @@
 [build]
-  command = "npm install -g @ionic/cli && ionic build"
-  publish = "www/browser"
+command = "node set-env.js && npm install -g @ionic/cli && ionic build"
+publish = "www/browser"
 
 [build.environment]
-  NODE_VERSION = "20"
+NODE_VERSION = "20"

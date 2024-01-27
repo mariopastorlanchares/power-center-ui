@@ -14,7 +14,6 @@ Proyecto para mostrar información de carga de inversores de placas solares con 
 nvm use v20.3.0
 ```
 
-
 ## Preparación de la instalación de desarrollo
 
 ### Instalación de NodeJS:
@@ -25,12 +24,9 @@ Para instalar NodeJS, visita [Node.js Official Website](https://nodejs.org/en) y
 
 Para instalar Ionic, ejecuta el siguiente comando en tu terminal:
 
-
-
 ```
 npm install -g @ionic/cli
 ```
-
 
 ### Configuración de Firebase:
 
@@ -40,7 +36,6 @@ Antes de levantar el proyecto, es necesario configurar tus credenciales de Fireb
 2. Haz clic en el icono de engranaje y selecciona "Configuración del proyecto".
 3. Desplázate hacia abajo hasta "Tus aplicaciones" y selecciona tu aplicación web (o regístrala si aún no lo has hecho).
 4. Copia la configuración de Firebase que aparece y reemplaza los valores correspondientes en tu archivo `environment.ts`:
-
 
 ```
 export const environment = {
@@ -61,7 +56,22 @@ appId: "YOUR_APP_ID"
 
 Para iniciar el servidor de desarrollo y ver tu proyecto, ejecuta:
 
-
 ```
 ionic serve
 ```
+
+## Despliegue en Netlify
+
+### Configuración de Variables de Entorno:
+
+Para desplegar tu proyecto en Netlify, necesitas configurar las variables de entorno relacionadas con Firebase. Sigue estos pasos:
+
+1. Ve a la configuración de tu proyecto en Netlify.
+2. Navega a "Settings" > "Build & deploy" > "Environment".
+3. Configura las siguientes variables de entorno:
+
+- `FIREBASE_API_KEY`: Tu apiKey de Firebase.
+- `FIREBASE_AUTH_DOMAIN`: Tu authDomain de Firebase.
+- ... (y así sucesivamente para las otras claves de configuración de Firebase).
+
+**Nota**: Encontrarás todas las variables a definir en el fichero set-env.js
