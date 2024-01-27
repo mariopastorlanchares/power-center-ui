@@ -13,3 +13,55 @@ Proyecto para mostrar información de carga de inversores de placas solares con 
 ```
 nvm use v20.3.0
 ```
+
+
+## Preparación de la instalación de desarrollo
+
+### Instalación de NodeJS:
+
+Para instalar NodeJS, visita [Node.js Official Website](https://nodejs.org/en) y descarga la versión recomendada.
+
+### Instalación de Ionic:
+
+Para instalar Ionic, ejecuta el siguiente comando en tu terminal:
+
+
+
+```
+npm install -g @ionic/cli
+```
+
+
+### Configuración de Firebase:
+
+Antes de levantar el proyecto, es necesario configurar tus credenciales de Firebase en `/src/environments/environment.ts`. Para ello, sigue estos pasos:
+
+1. Ve a la [Firebase Console](https://console.firebase.google.com/) y selecciona tu proyecto.
+2. Haz clic en el icono de engranaje y selecciona "Configuración del proyecto".
+3. Desplázate hacia abajo hasta "Tus aplicaciones" y selecciona tu aplicación web (o regístrala si aún no lo has hecho).
+4. Copia la configuración de Firebase que aparece y reemplaza los valores correspondientes en tu archivo `environment.ts`:
+
+
+```
+export const environment = {
+production: false,
+firebaseConfig: {
+apiKey: "YOUR_API_KEY",
+authDomain: "YOUR_AUTH_DOMAIN",
+databaseURL: "YOUR_DATABASE_URL",
+projectId: "YOUR_PROJECT_ID",
+storageBucket: "YOUR_STORAGE_BUCKET",
+messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+appId: "YOUR_APP_ID"
+}
+};
+```
+
+### Levantar el proyecto:
+
+Para iniciar el servidor de desarrollo y ver tu proyecto, ejecuta:
+
+
+```
+ionic serve
+```
