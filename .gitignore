@@ -58,7 +58,6 @@ yarn-error.log
 /.angular/cache
 .sass-cache/
 /connect.lock
-/coverage
 /libpeerconnection.log
 testem.log
 /typings
@@ -69,3 +68,6 @@ Thumbs.db
 
 # Angular
 /src/firebase-config.json
+
+# Local Netlify folder
+.netlify
