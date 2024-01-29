@@ -15,9 +15,6 @@ const firebaseConfig = {
 // Convertir la configuración de Firebase a un string en formato JSON
 const firebaseConfigContent = JSON.stringify(firebaseConfig, null, 2);
 
-// Mostrar en consola lo que se va a escribir en el archivo
-console.log('Escribiendo en firebase-config.json:', firebaseConfigContent);
-
 // Escribir la configuración en el archivo firebase-config.json ubicado en el directorio src
 fs.writeFileSync('./src/firebase-config.json', firebaseConfigContent);
 
