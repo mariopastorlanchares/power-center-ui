@@ -68,4 +68,4 @@ testem.log
 Thumbs.db
 
 # Angular
-/src/environments/environment.ts
+/src/firebase-config.json

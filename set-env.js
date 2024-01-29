@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-// En Netlify inserta todas estas variables de entorno
+// Recoger las variables de entorno para la configuración de Firebase
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -12,13 +12,14 @@ const firebaseConfig = {
   measurementId: process.env.FIREBASE_MEASUREMENT_ID
 };
 
-const environmentContent = `
-export const environment = {
-  production: false,
-  firebaseConfig: ${JSON.stringify(firebaseConfig, null, 2)}
-};
-`;
-console.log('Escribiendo en environment.ts:', environmentContent);
+// Convertir la configuración de Firebase a un string en formato JSON
+const firebaseConfigContent = JSON.stringify(firebaseConfig, null, 2);
 
-fs.writeFileSync('./src/environments/environment.ts', environmentContent);
-console.log('Archivo environment.ts generado con éxito');
+// Mostrar en consola lo que se va a escribir en el archivo
+console.log('Escribiendo en firebase-config.json:', firebaseConfigContent);
+
+// Escribir la configuración en el archivo firebase-config.json ubicado en el directorio src
+fs.writeFileSync('./src/firebase-config.json', firebaseConfigContent);
+
+// Mensaje de éxito
+console.log('Archivo firebase-config.json generado con éxito');
