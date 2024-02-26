@@ -101,16 +101,20 @@ export class InverterService {
 
   private parseInverterData(data: any): Inverter {
     // Realizar el parsing necesario de los datos aquí, por ejemplo:
+    if (!data) {
+      console.error('parseInverterData fue llamado con data undefined o null');
+      return DEFAULT_INVERTER; // O maneja este caso según sea necesario
+    }
     return {
-      acOutputActivePower: parseInt(data.acOutputActivePower),
-      batteryCapacity: parseInt(data.batteryCapacity),
-      pvInputPower: parseInt(data.pvInputPower),
-      batteryVoltage: parseFloat(data.batteryVoltage),
-      totalOutActivePower: parseInt(data.totalOutActivePower),
-      batteryDischgCurrent: parseInt(data.batteryDischgCurrent),
-      totalChargingCurrent: parseInt(data.totalChargingCurrent),
-      totalAcOutputActivePower: parseInt(data.totalAcOutputActivePower),
-      timestr: data.timestr
+      acOutputActivePower: parseInt(data.acOutputActivePower ?? '0'),
+      batteryCapacity: parseInt(data.batteryCapacity ?? '0'),
+      pvInputPower: parseInt(data.pvInputPower ?? '0'),
+      batteryVoltage: parseFloat(data.batteryVoltage ?? '0'),
+      totalOutActivePower: parseInt(data.totalOutActivePower ?? '0'),
+      batteryDischgCurrent: parseInt(data.batteryDischgCurrent ?? '0'),
+      totalChargingCurrent: parseInt(data.totalChargingCurrent ?? '0'),
+      totalAcOutputActivePower: parseInt(data.totalAcOutputActivePower ?? '0'),
+      timestr: data.timestr ?? ''
     };
   }
 
